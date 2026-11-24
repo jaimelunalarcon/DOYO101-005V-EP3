@@ -1,0 +1,32 @@
+# Clúster EKS para EP3 (AWS Academy Learner Lab).
+# IE1: eksctl + LabRole existente. No crea roles IAM nuevos.
+# Usar scripts/ep3-01-create-cluster.sh (sustituye ACCOUNT_ID).
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: doy0101-tienda
+  region: us-east-1
+  version: "1.29"
+
+iam:
+  withOIDC: false
+  serviceRoleARN: "arn:aws:iam::ACCOUNT_ID:role/LabRole"
+
+vpc:
+  nat:
+    gateway: Disable
+
+managedNodeGroups:
+  - name: ng-tienda
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 2
+    volumeSize: 20
+    privateNetworking: false
+    iam:
+      instanceRoleARN: "arn:aws:iam::ACCOUNT_ID:role/LabRole"
+    labels:
+      role: worker
+      project: doy0101
